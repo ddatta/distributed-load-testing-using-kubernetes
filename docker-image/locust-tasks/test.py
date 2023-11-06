@@ -1,9 +1,11 @@
 import requests
+import uuid
 
-url = "https://pkc-z1o60.europe-west1.gcp.confluent.cloud:443/kafka/v3/clusters/lkc-6w31m8/topics/iotdemotopic/records"
-data = '{"value":{"type":"JSON","data":"Hello World!"}}'
-headers = {'Content-type': 'application/json',
-               'Authorization': 'Basic UzNYNzJWWVFDVVo1NFlLUzpiT0Q2c1FuVHlLTWI4ZDd1RWJSVUNDQzdTdStQcG9LUUhqUThvMStheGw2RUQvNlRqTGlwMU84Y01aVVNteDB5'}
+url = "http://34.140.142.132/api/measurement"
 
+id = str(uuid.uuid4())
+data = '{"vehicleId":"'+id+'"}'
+headers = {'Content-type': 'application/json'}
+print(data)
 r = requests.post(url, data=data, headers=headers)
 print(r.text)

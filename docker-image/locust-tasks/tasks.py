@@ -36,15 +36,15 @@ class MetricsTaskSet(TaskSet):
 
     @task
     def post_metrics(self):
-        auth_header = {'Content-type': 'application/json',
-               'Authorization': 'Basic UzNYNzJWWVFDVVo1NFlLUzpiT0Q2c1FuVHlLTWI4ZDd1RWJSVUNDQzdTdStQcG9LUUhqUThvMStheGw2RUQvNlRqTGlwMU84Y01aVVNteDB5'}
+        header = {'Content-type': 'application/json'}
+               # 'Authorization': 'Basic UzNYNzJWWVFDVVo1NFlLUzpiT0Q2c1FuVHlLTWI4ZDd1RWJSVUNDQzdTdStQcG9LUUhqUThvMStheGw2RUQvNlRqTGlwMU84Y01aVVNteDB5'}
         #data='{"value":{"type":"JSON","data":"mmt 514"}}';
         # self.client.post(
         #    "/kafka/v3/clusters/lkc-zpg6g7/topics/iotdemotopic/records", data=data)
         # data='{"vehicleId": self._deviceid}'
-        data = '{"vehicleId":"Hello World!"}'
+        data = '{"vehicleId":"'+self._deviceid+'"}'
         self.client.post(
-            "/api/measurement", data=data, headers=auth_header)
+            "/api/measurement", data=data, headers=header)
 
 
 class MetricsLocust(FastHttpUser):
