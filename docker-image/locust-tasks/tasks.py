@@ -16,7 +16,7 @@
 
 
 import uuid
-
+import requests
 from datetime import datetime
 from locust import FastHttpUser, TaskSet, task
 
@@ -29,15 +29,22 @@ class MetricsTaskSet(TaskSet):
     def on_start(self):
         self._deviceid = str(uuid.uuid4())
 
-    @task(1)
-    def login(self):
-        self.client.post(
-            '/login', {"deviceid": self._deviceid})
+    # @task(1)
+    # def login(self):
+    #     self.client.post(
+    #         '/login', {"deviceid": self._deviceid})
 
-    @task(999)
+    @task
     def post_metrics(self):
+        auth_header = {'Content-type': 'application/json',
+               'Authorization': 'Basic UzNYNzJWWVFDVVo1NFlLUzpiT0Q2c1FuVHlLTWI4ZDd1RWJSVUNDQzdTdStQcG9LUUhqUThvMStheGw2RUQvNlRqTGlwMU84Y01aVVNteDB5'}
+        #data='{"value":{"type":"JSON","data":"mmt 514"}}';
+        # self.client.post(
+        #    "/kafka/v3/clusters/lkc-zpg6g7/topics/iotdemotopic/records", data=data)
+        # data='{"vehicleId": self._deviceid}'
+        data = '{"vehicleId":"Hello World!"}'
         self.client.post(
-            "/metrics", {"deviceid": self._deviceid, "timestamp": datetime.now()})
+            "/api/measurement", data=data, headers=auth_header)
 
 
 class MetricsLocust(FastHttpUser):
