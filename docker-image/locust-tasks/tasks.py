@@ -17,8 +17,13 @@
 
 import uuid
 import requests
+import time
+import random
+import enum
 from datetime import datetime
 from locust import FastHttpUser, TaskSet, task
+
+
 
 
 # [START locust_test_task]
@@ -27,7 +32,8 @@ class MetricsTaskSet(TaskSet):
     _deviceid = None
 
     def on_start(self):
-        self._deviceid = str(uuid.uuid4())
+        self._deviceid = random.randint(1,9999999)
+        
 
     # @task(1)
     # def login(self):
@@ -42,7 +48,26 @@ class MetricsTaskSet(TaskSet):
         # self.client.post(
         #    "/kafka/v3/clusters/lkc-zpg6g7/topics/iotdemotopic/records", data=data)
         # data='{"vehicleId": self._deviceid}'
-        data = '{"vehicleId":"'+self._deviceid+'"}'
+        # ts = datetime.now()
+        #ts = time.Time()
+        ts = round(time.time() * 1000)
+        temp = random.uniform(-50.0, 90.0)
+        longi =  random.uniform(0.0, 180.0)
+        lat =  random.uniform(-90.0, 90.0)
+        altitude =  random.uniform(-3.0, 8000.0)
+        er =  random.uniform(0.0, 360.0)
+        fps =  random.uniform(0.0, 30.1)
+        et = random.uniform(-10.0, 90.0)
+        fu = random.uniform(0.0, 60.0)
+        ds = random.uniform(0.0, 150.0)
+
+        data = '{"vehicleId":'+str(self._deviceid)+ ', "ts" : ' + str(ts) + \
+        ',"temperature":' + str(temp) +', "operatingtime" : 10,"fuelusage": '+  str(fu) +',"front_linkage_position" : 1,  \
+            "drivingspeed": '+ str(ds) +',"enginestate":1,"autopilot_system_state":0,"engine_load":35.7,"latitude":' + str(lat)  + ', \
+            "longitude": ' + str(longi)  + ',"altitude":' + str(altitude) + ',"engine_rotation":' + str(er) + ',"front_pme_shaft":' + str(fps) + ', \
+            "rear_linkage_position":3,"four_wheel_driving_state":"false","fuel_tank_level":1,"last_error_msg": "no-error" ,"engine_temperature":' + str(et) + ', \
+                "connection_state":"connected","lte_connection_level":34.1,"mode":"test"}'
+        print(data)
         self.client.post(
             "/api/measurement", data=data, headers=header)
 
